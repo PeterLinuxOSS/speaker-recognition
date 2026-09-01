@@ -5,7 +5,7 @@ FROM ${BUILD_FROM}
 # the repository root — it is fetched from a pinned tag instead. Copying it in
 # is what the release pipeline did, which is why installing straight from git
 # failed with "COPY pyproject.toml: not found".
-ARG SPEAKER_RECOGNITION_REF=v2.0.0
+ARG SPEAKER_RECOGNITION_REF=v2.0.1
 ARG SPEAKER_RECOGNITION_REPO=PeterLinuxOSS/speaker-recognition
 
 # manylinux wheels (sherpa-onnx, numpy) are glibc-only, hence the Debian base.

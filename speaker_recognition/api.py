@@ -19,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 app = FastAPI(
     title="Speaker Recognition Service",
     description="API for training and recognizing speakers using voice samples",
-    version="2.0.0",
+    version="2.0.1",
 )
 
 

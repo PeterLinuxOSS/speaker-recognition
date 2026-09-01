@@ -1,5 +1,5 @@
 name: Speaker Recognition
-version: "2.0.0"
+version: "2.0.1"
 slug: speaker_recognition
 description: >-
   Identify who is speaking to Home Assistant from their voice, using ONNX
