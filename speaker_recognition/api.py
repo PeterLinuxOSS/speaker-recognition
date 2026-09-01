@@ -19,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 app = FastAPI(
     title="Speaker Recognition Service",
     description="API for training and recognizing speakers using voice samples",
-    version="0.0.0-dev",
+    version="2.0.0",
 )
 
 
@@ -65,3 +65,21 @@ async def recognize(request: RecognitionRequest) -> RecognitionResult:
     except Exception as error:
         _LOGGER.error(f"Error during recognition: {error}")
         raise HTTPException(status_code=500, detail=str(error))
+
+
+@app.get("/speakers", tags=["Training"])
+async def list_speakers() -> dict[str, list[str]]:
+    """List speakers that have a stored voiceprint."""
+    return {"speakers": recognizer.enrolled_speakers()}
+
+
+@app.delete(
+    "/speakers/{user_id}",
+    responses={404: {"model": ErrorResponse}},
+    tags=["Training"],
+)
+async def forget_speaker(user_id: str) -> dict[str, str]:
+    """Remove a speaker's voiceprint."""
+    if not recognizer.forget(user_id):
+        raise HTTPException(status_code=404, detail=f"No voiceprint for {user_id}")
+    return {"status": "removed", "user_id": user_id}

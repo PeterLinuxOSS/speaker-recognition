@@ -230,6 +230,34 @@ class SpeakerRecognizer:
             count=len(self._reference_embeddings),
         )
 
+    def enrolled_speakers(self) -> list[str]:
+        """List every speaker with a stored voiceprint."""
+        if not self._embeddings_directory.exists():
+            return []
+        return sorted(
+            path.name[: -len(EMBEDDING_SUFFIX)]
+            for path in self._embeddings_directory.glob(f"*{EMBEDDING_SUFFIX}")
+        )
+
+    def forget(self, user_id: str) -> bool:
+        """Remove a speaker's voiceprint.
+
+        Without this there is no way back out of an enrollment: a mistyped or
+        test speaker keeps being scored against every utterance forever.
+        """
+        removed = False
+        for path in (self._embedding_path(user_id), self._metadata_path(user_id)):
+            if path.exists():
+                path.unlink()
+                removed = True
+
+        self._reference_embeddings.pop(user_id, None)
+        self._is_trained = bool(self._reference_embeddings)
+
+        if removed:
+            _LOGGER.info(f"Removed voiceprint for {user_id}")
+        return removed
+
     def recognize(self, request: RecognitionRequest) -> RecognitionResult:
         """Recognize speaker from audio data.
 
