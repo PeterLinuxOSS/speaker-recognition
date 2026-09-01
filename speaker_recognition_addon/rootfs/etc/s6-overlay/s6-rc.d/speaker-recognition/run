@@ -2,19 +2,25 @@
 # shellcheck shell=bash
 set -e
 
+declare log_level
+log_level="$(bashio::config 'log_level' | tr '[:lower:]' '[:upper:]')"
+
+if ! bashio::fs.file_exists "${MODEL_PATH}"; then
+    bashio::exit.nok "Speaker embedding model missing at ${MODEL_PATH} — rebuild the add-on."
+fi
+
 export HOST="$(bashio::config 'host')"
 export PORT="$(bashio::config 'port')"
-export LOG_LEVEL="$(bashio::config 'log_level' | tr '[:lower:]' '[:upper:]')"
 export ACCESS_LOG="$(bashio::config 'access_log')"
 export EMBEDDINGS_DIR="$(bashio::config 'embeddings_dir')"
 export NUM_THREADS="$(bashio::config 'num_threads')"
 
-if [[ ! -f "${MODEL_PATH}" ]]; then
-    bashio::exit.nok "Speaker embedding model missing at ${MODEL_PATH} — rebuild the add-on."
-fi
-
-bashio::log.info "Speaker Recognition on ${HOST}:${PORT}, model $(basename "$(readlink -f "${MODEL_PATH}")")"
+bashio::log.info "Speaker Recognition on ${HOST}:${PORT}"
+bashio::log.info "Model: $(basename "$(readlink -f "${MODEL_PATH}")")"
 mkdir -p "${EMBEDDINGS_DIR}"
 
 cd /app
+# Exported last: bashio dereferences ${!LOG_LEVEL}, so an exported LOG_LEVEL
+# breaks every bashio call above it.
+export LOG_LEVEL="${log_level}"
 exec python3 -m speaker_recognition

@@ -30,7 +30,6 @@ RUN mkdir -p /models \
 
 ENV HOST=0.0.0.0 \
     PORT=8099 \
-    LOG_LEVEL=INFO \
     ACCESS_LOG=true \
     MODEL_PATH=/models/speaker-embedding.onnx \
     NUM_THREADS=2 \
@@ -52,4 +51,3 @@ LABEL \
     org.opencontainers.image.revision="${BUILD_REF}" \
     org.opencontainers.image.licenses="MIT"
 
-CMD ["/init"]
