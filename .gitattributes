@@ -1,0 +1,4 @@
+# s6 refuses a CRLF "type" file, which silently bricks the add-on.
+* text=auto eol=lf
+*.png binary
+*.onnx binary
