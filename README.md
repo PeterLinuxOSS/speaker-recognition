@@ -13,7 +13,7 @@
 - 🐳 **Easy deployment** via Home Assistant addon or standalone Docker
 - 🔌 **REST API** for flexible integration with any platform
 - 📦 **Python client library** for programmatic access
-- 🎯 **High accuracy** powered by Resemblyzer voice embeddings
+- 🎯 **High accuracy** powered by ONNX speaker embeddings (NeMo TitaNet)
 - ⚡ **Fast recognition** with cached embeddings
 - 🔧 **Configurable** via UI or YAML
 
@@ -57,7 +57,7 @@ Install the client-only package (no ML dependencies):
 pip install speaker-recognition
 ```
 
-Install with server capabilities (requires Python <3.10):
+Install with server capabilities:
 
 ```bash
 pip install speaker-recognition[server]
@@ -322,7 +322,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Resemblyzer](https://github.com/resemble-ai/Resemblyzer) - Neural voice embeddings
+- [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) - Speaker embedding inference
+- [NVIDIA NeMo TitaNet](https://catalog.ngc.nvidia.com/models) - Speaker embedding model
 - [Home Assistant](https://www.home-assistant.io/) - Home automation platform
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework
 

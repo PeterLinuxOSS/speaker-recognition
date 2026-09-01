@@ -15,11 +15,15 @@ from speaker_recognition.const import (  # noqa: E402
     DEFAULT_EMBEDDINGS_DIR,
     DEFAULT_HOST,
     DEFAULT_LOG_LEVEL,
+    DEFAULT_MODEL_PATH,
+    DEFAULT_NUM_THREADS,
     DEFAULT_PORT,
     ENV_ACCESS_LOG,
     ENV_EMBEDDINGS_DIR,
     ENV_HOST,
     ENV_LOG_LEVEL,
+    ENV_MODEL_PATH,
+    ENV_NUM_THREADS,
     ENV_PORT,
 )
 from speaker_recognition.logging_config import configure_logging  # noqa: E402
@@ -68,6 +72,19 @@ def serve(
         help="Directory to store voice embeddings",
         envvar=ENV_EMBEDDINGS_DIR,
     ),
+    model_path: str = typer.Option(
+        DEFAULT_MODEL_PATH,
+        "--model-path",
+        "-m",
+        help="Path to the ONNX speaker embedding model",
+        envvar=ENV_MODEL_PATH,
+    ),
+    num_threads: int = typer.Option(
+        DEFAULT_NUM_THREADS,
+        "--num-threads",
+        help="Threads used for embedding inference",
+        envvar=ENV_NUM_THREADS,
+    ),
 ) -> None:
     """Start the Speaker Recognition Service."""
 
@@ -76,6 +93,8 @@ def serve(
     config.log_level = log_level.upper()
     config.access_log = access_log
     config.embeddings_directory = embeddings_dir
+    config.model_path = model_path
+    config.num_threads = num_threads
 
     recognizer.embeddings_directory = config.embeddings_directory
 
@@ -86,6 +105,7 @@ def serve(
     _LOGGER.info(f"Port: {config.port}")
     _LOGGER.info(f"Log Level: {config.log_level}")
     _LOGGER.info(f"Embeddings Directory: {config.embeddings_directory}")
+    _LOGGER.info(f"Model: {config.model_path}")
 
     uvicorn.run(
         app,

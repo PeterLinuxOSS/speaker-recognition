@@ -1,16 +1,20 @@
 name: Speaker Recognition
-version: "0.0.0-dev"
+version: "2.0.0"
 slug: speaker_recognition
-description: Speaker recognition service using voice embeddings for identification
-url: https://github.com/eulemitkeule/speaker-recognition/tree/master/speaker_recognition_addon
+description: >-
+  Identify who is speaking to Home Assistant from their voice, using ONNX
+  speaker embeddings.
+url: https://github.com/PeterLinuxOSS/speaker-recognition
 arch:
   - amd64
 init: false
 startup: services
+boot: auto
 ports:
   8099/tcp: 8099
 ports_description:
-  8099/tcp: Speaker Recognition API
+  8099/tcp: Speaker Recognition API, used by the integration
+watchdog: http://[HOST]:[PORT:8099]/health
 map:
   - share:rw
 options:
@@ -19,9 +23,11 @@ options:
   log_level: "info"
   access_log: true
   embeddings_dir: "/share/speaker_recognition/embeddings"
+  num_threads: 2
 schema:
   host: str
   port: port
   log_level: list(debug|info|warning|error|critical)
   access_log: bool
   embeddings_dir: str
+  num_threads: int(1,8)

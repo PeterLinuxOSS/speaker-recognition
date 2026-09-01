@@ -7,6 +7,8 @@ from speaker_recognition.const import (
     DEFAULT_EMBEDDINGS_DIR,
     DEFAULT_HOST,
     DEFAULT_LOG_LEVEL,
+    DEFAULT_MODEL_PATH,
+    DEFAULT_NUM_THREADS,
     DEFAULT_PORT,
 )
 
@@ -19,6 +21,8 @@ class Config(BaseModel):
     log_level: str = DEFAULT_LOG_LEVEL
     access_log: bool = DEFAULT_ACCESS_LOG
     embeddings_directory: str = DEFAULT_EMBEDDINGS_DIR
+    model_path: str = DEFAULT_MODEL_PATH
+    num_threads: int = DEFAULT_NUM_THREADS
 
     class ConfigDict:
         """Pydantic configuration."""

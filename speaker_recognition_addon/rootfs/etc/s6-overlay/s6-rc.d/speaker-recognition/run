@@ -2,21 +2,18 @@
 # shellcheck shell=bash
 set -e
 
-bashio::log.info "Starting Speaker Recognition Service..."
+export HOST="$(bashio::config 'host')"
+export PORT="$(bashio::config 'port')"
+export LOG_LEVEL="$(bashio::config 'log_level' | tr '[:lower:]' '[:upper:]')"
+export ACCESS_LOG="$(bashio::config 'access_log')"
+export EMBEDDINGS_DIR="$(bashio::config 'embeddings_dir')"
+export NUM_THREADS="$(bashio::config 'num_threads')"
 
-export HOST=$(bashio::config 'host')
-export PORT=$(bashio::config 'port')
-export LOG_LEVEL=$(bashio::config 'log_level' | tr '[:lower:]' '[:upper:]')
-export ACCESS_LOG=$(bashio::config 'access_log')
-export EMBEDDINGS_DIR=$(bashio::config 'embeddings_dir')
+if [[ ! -f "${MODEL_PATH}" ]]; then
+    bashio::exit.nok "Speaker embedding model missing at ${MODEL_PATH} — rebuild the add-on."
+fi
 
-bashio::log.info "Configuration:"
-bashio::log.info "  Host: ${HOST}"
-bashio::log.info "  Port: ${PORT}"
-bashio::log.info "  Log Level: ${LOG_LEVEL}"
-bashio::log.info "  Access Log: ${ACCESS_LOG}"
-bashio::log.info "  Embeddings Directory: ${EMBEDDINGS_DIR}"
-
+bashio::log.info "Speaker Recognition on ${HOST}:${PORT}, model $(basename "$(readlink -f "${MODEL_PATH}")")"
 mkdir -p "${EMBEDDINGS_DIR}"
 
 cd /app
