@@ -263,7 +263,9 @@ class SpeakerRecognitionSTTEntity(SpeechToTextEntity):
                     }
                 else:
                     _LOGGER.debug("Speaker recognition returned no result")
-            except (OSError, ValueError, TypeError) as error:
-                _LOGGER.error("Error during speaker recognition: %s", error)
+            except Exception as error:  # noqa: BLE001
+                # Never let identification break speech-to-text: the transcript
+                # has already been produced by the wrapped entity above.
+                _LOGGER.warning("Speaker recognition failed, transcript kept: %s", error)
 
         return result

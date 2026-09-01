@@ -134,8 +134,11 @@ class SpeakerRecognition:
 
             result = await self._client.recognize(request)
 
-        except (OSError, ValueError, TypeError) as error:
-            _LOGGER.error("Error during recognition: %s", error)
+        except Exception as error:  # noqa: BLE001
+            # Identification is best-effort enrichment. The client raises httpx
+            # errors, which no narrower clause here caught, so a stopped or
+            # failing back end used to take the whole transcription down with it.
+            _LOGGER.warning("Speaker recognition unavailable: %s", error)
             return None
         else:
             _LOGGER.debug(
